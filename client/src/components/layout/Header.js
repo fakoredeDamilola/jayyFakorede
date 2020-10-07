@@ -81,6 +81,10 @@ class Header extends Component {
               <Link to="/about">ABOUT ME</Link>
               <div className="animation"></div>
             </li>
+            <li onClick={this.selectClicked.bind(this)}>
+              <Link to="/login">LOGIN ME</Link>
+              <div className="animation"></div>
+            </li>
             <li onClick={this.selectClicked.bind(this)} className="checkAuth" style={{ display: this.state.auth ? "block" : "none" }}>
               <Link to="/profile/subscribers" >SUBSCRIBERS</Link>
               <div className="animation"></div>
