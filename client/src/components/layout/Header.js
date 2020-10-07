@@ -77,12 +77,12 @@ class Header extends Component {
               <div className="animation"></div>
             </li>
 
-            <li onClick={this.selectClicked.bind(this)}>
+            <li onClick={this.selectClicked.bind(this)} style={{ marginLeft: this.state.auth ? "380px" : "620px" }}>
               <Link to="/about">ABOUT ME</Link>
               <div className="animation"></div>
             </li>
             <li onClick={this.selectClicked.bind(this)}>
-              <Link to="/login">LOGIN ME</Link>
+              <Link to="/login">LOGIN</Link>
               <div className="animation"></div>
             </li>
             <li onClick={this.selectClicked.bind(this)} className="checkAuth" style={{ display: this.state.auth ? "block" : "none" }}>
