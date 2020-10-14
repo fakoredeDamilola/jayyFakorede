@@ -26,7 +26,7 @@ export const previewArticle = (article) => {
 
 
 export const getCategories = () => async dispatch => {
-  const res = await axios.get('/api/articlecategory')
+  const res = await axios.get('http://localhost:4000/api/articlecategory')
 
   dispatch({
     type: GET_CATEGORIES,
@@ -35,7 +35,7 @@ export const getCategories = () => async dispatch => {
 
 };
 export const getCategory = (id) => async dispatch => {
-  const res = await axios.get(`/api/articlecategory/category/${id}`)
+  const res = await axios.get(`http://localhost:4000/api/articlecategory/category/${id}`)
 
   dispatch({
     type: GET_CATEGORY,
@@ -56,10 +56,10 @@ export const addCategory = (category, token) => async dispatch => {
       'Authorization': `Bearer ${token}`
     }
   }
-  axios.post('/api/image/upload', data, imgConfig)
+  axios.post('http://localhost:4000/api/image/upload', data, imgConfig)
   let imageName = file.name.split(" ").join("%20")
-  category.previewImage = `/api/image/file/${imageName}`
-  const res = await axios.post('/api/articlecategory/add',
+  category.previewImage = `http://localhost:4000/api/image/file/${imageName}`
+  const res = await axios.post('http://localhost:4000/api/articlecategory/add',
     category, authConfig)
   dispatch({
     type: ADD_CATEGORY,
@@ -74,7 +74,7 @@ export const deleteCategory = (id, token) => async dispatch => {
       'Authorization': `Bearer ${token}`
     }
   }
-  const res = await axios.delete(`/api/articlecategory/${id}`, authConfig)
+  const res = await axios.delete(`http://localhost:4000/api/articlecategory/${id}`, authConfig)
 }
 
 
@@ -82,14 +82,14 @@ export const deleteCategory = (id, token) => async dispatch => {
 
 
 export const getArticles = (id) => async dispatch => {
-  const res = await axios.get(`/api/article/articles/${id}`)
+  const res = await axios.get(`http://localhost:4000/api/article/articles/${id}`)
   dispatch({
     type: GET_ARTICLES,
     payload: res.data
   })
 }
 export const getArticle = (id) => async dispatch => {
-  const res = await axios.get(`/api/article/${id}`)
+  const res = await axios.get(`http://localhost:4000/api/article/${id}`)
   dispatch({
     type: GET_ARTICLE,
     payload: res.data
@@ -111,10 +111,10 @@ export const addArticle = (article, token) => async dispatch => {
       'Authorization': `Bearer ${token}`
     }
   }
-  axios.post('/api/image/upload', data, imgConfig)
+  axios.post('http://localhost:4000/api/image/upload', data, imgConfig)
   let imageName = file.name.split(" ").join("%20")
-  article.previewImage = `/api/image/file/${imageName}`
-  const res = await axios.post('/api/article/add',
+  article.previewImage = `http://localhost:4000/api/image/file/${imageName}`
+  const res = await axios.post('http://localhost:4000/api/article/add',
     article, authConfig)
   dispatch({
     type: ADD_ARTICLE,
@@ -130,7 +130,7 @@ export const deleteArticle = (id, token) => async dispatch => {
       'Authorization': `Bearer ${token}`
     }
   }
-  const res = await axios.delete(`/api/article/${id}`, authConfig)
+  const res = await axios.delete(`http://localhost:4000/api/article/${id}`, authConfig)
   dispatch({
     type: EDIT_ARTICLES,
     payload: res.data
@@ -143,11 +143,11 @@ export const editArticle = (id, article, token) => async dispatch => {
     }
   }
   console.log(article)
-  const res = await axios.post(`/api/article/update/${id}`,
+  const res = await axios.post(`http://localhost:4000/api/article/update/${id}`,
     article, authConfig)
 }
 export const uploadArticleImage = (formData, config) => async dispatch => {
-  axios.post('/api/upload/image', formData, config)
+  axios.post('http://localhost:4000/api/upload/image', formData, config)
     .then((response) => {
       alert("The file is successfully uploaded")
     }).catch((error) => {
@@ -173,7 +173,7 @@ export const addSubscribers = (subscribe, token) => async dispatch => {
       'Authorization': `Bearer ${token}`
     }
   }
-  const res = await axios.post('/api/subscribe/add',
+  const res = await axios.post('http://localhost:4000/api/subscribe/add',
     subscribe, authConfig)
   dispatch({
     type: ADD_SUBSCRIBERS,
@@ -188,7 +188,7 @@ export const getSubscribers = (token) => async dispatch => {
       'Authorization': `Bearer ${token}`
     }
   }
-  const res = await axios.get('/api/subscribe', authConfig)
+  const res = await axios.get('http://localhost:4000/api/subscribe', authConfig)
   dispatch({
     type: GET_SUBSCRIBERS,
     payload: res.data
@@ -200,7 +200,7 @@ export const addNumberOfArticles = (id, number, token) => async dispatch => {
       'Authorization': `Bearer ${token}`
     }
   }
-  const res = await axios.post(`/api/articleCategory/addNumber/${id}`, number, authConfig)
+  const res = await axios.post(`http://localhost:4000/api/articleCategory/addNumber/${id}`, number, authConfig)
   dispatch({
     type: ADD_NUMBERS,
     payload: res.data

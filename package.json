@@ -20,6 +20,17 @@
     "nodemon": "^2.0.4"
   },
   "devDependencies": {},
+  "nodemonConfig": {
+    "restartable": "rs",
+    "ignore": [
+      "node_modules/**/node_modules"
+    ],
+    "delay": "2500",
+    "env": {
+      "NODE_ENV": "development",
+      "PORT": 4000
+    }
+  },
   "scripts": {
     "start": "node server.js",
     "build": "cd client && npm run build",

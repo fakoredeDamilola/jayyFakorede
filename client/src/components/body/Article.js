@@ -43,7 +43,24 @@ class Article extends Component {
     const { article } = this.props;
     return article ? (
       <div className="articlePage" style={{ wordWrap: "break-word" }}>
-        <div className="editBtn" style={{ display: this.state.auth ? "flex" : "none" }}>
+        {this.state.auth ?
+          <div className="editBtn">
+            <div className="add_article">
+              <button className="add_article_button" onClick={this.editArticle}>
+                edit article
+            </button>
+            </div>
+            <div className="add_article">
+              <button className="add_article_button" onClick={this.deleteArticle} style={{ backgroundColor: "rgb(200, 19, 19)" }}>
+                delete article
+            </button>
+            </div>
+          </div>
+
+          : null
+
+        }
+        <div className="editBtn">
           <div className="add_article">
             <button className="add_article_button" onClick={this.editArticle}>
               edit article

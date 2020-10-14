@@ -1,26 +1,26 @@
 const express = require("express")
 const cors = require("cors")
 const mongoose = require("mongoose")
+const cookieParser = require('cookie-parser')
+
 require("dotenv").config()
 const app = express()
-// "nodemonConfig": {
-//     "restartable": "rs",
-//     "ignore": [
-//       "node_modules/**/node_modules"
-//     ],
-//     "delay": "2500",
-//     "env": {
-//       "NODE_ENV": "development",
-//       "PORT": 4000
-//     }
-//   },
+
 const port = process.env.PORT || 4000
 app.use(cors())
 app.use(express.json())
+app.use(cookieParser())
 const uri = process.env.ATLAS_URI
 mongoose.connect(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
+})
+
+
+//cookie
+app.get("/cookie", function (req, res) {
+    res.cookie("myFirstCookie", "looks Good")
+    res.send("wow")
 })
 
 const connection = mongoose.connection
@@ -31,6 +31,8 @@ connection.once('open', () => {
     // gfs = Grid(connection.db, mongoose.mongo)
     // gfs.collection("jayyImage")
 })
+
+//set headers in node
 
 
 const articleCategory = require("./routes/articleCategory")

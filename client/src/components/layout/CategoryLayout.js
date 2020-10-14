@@ -48,22 +48,25 @@ class Category_layout extends Component {
     return (
       <div>
         <div className="category-container">
-          <div className="editBtn" style={{ display: this.state.auth ? "flex" : "none" }}>
-            <div className="add_article">
-              <button className="add_article_button" onClick={this.addArticle}>
-                add article
+          {this.state.auth ?
+            <div className="editBtn">
+              <div className="add_article">
+                <button className="add_article_button" onClick={this.addArticle}>
+                  add article
               </button>
-            </div>
-            <div className="add_article">
-              <button
-                className="add_article_button"
-                onClick={this.deleteCategory}
-                style={{ backgroundColor: "rgb(200, 19, 19)" }}
-              >
-                Delete Category
+              </div>
+              <div className="add_article">
+                <button
+                  className="add_article_button"
+                  onClick={this.deleteCategory}
+                  style={{ backgroundColor: "rgb(200, 19, 19)" }}
+                >
+                  Delete Category
               </button>
+              </div>
             </div>
-          </div>
+            : null
+          }
 
           <div className="category-name">
             <div

@@ -14,6 +14,7 @@ class Header extends Component {
       this.setState({ auth: auth[1].logged })
     }
   }
+
   UNSAFE_componentWillUnmount() {
     document.removeEventListener("mousedown", this.showNav, false);
   }
@@ -51,7 +52,7 @@ class Header extends Component {
       >
         <div className="header-top">
           <div className="logo" onClick={this.selectClicked.bind(this)}>
-            {/* <img src="" alt="" className="logo-img"/> */}
+
             <Link to="/" style={{ textDecoration: "none" }}>
               {" "}
               Jayy Fakorede
@@ -68,16 +69,23 @@ class Header extends Component {
 
         <nav>
           <ul className="menu">
-            <li onClick={this.selectClicked.bind(this)} className="checkAuth" style={{ display: this.state.auth ? "block" : "none" }}>
-              <Link to="/profile/addCategory" >ADD CATEGORY</Link>
-              <div className="animation"></div>
-            </li>
+
+            {this.state.auth ?
+              <li onClick={this.selectClicked.bind(this)} className="checkAuth">
+                <Link to="/profile/addCategory" >ADD CATEGORY</Link>
+                <div className="animation"></div>
+              </li> : <li className="diversion">
+                <div>diversion</div>
+
+              </li>
+
+            }
             <li onClick={this.selectClicked.bind(this)}>
               <Link to="/articles">ARTICLES</Link>
               <div className="animation"></div>
             </li>
 
-            <li onClick={this.selectClicked.bind(this)} style={{ marginLeft: this.state.auth ? "380px" : "620px" }}>
+            <li onClick={this.selectClicked.bind(this)} >
               <Link to="/about">ABOUT ME</Link>
               <div className="animation"></div>
             </li>
@@ -85,21 +93,17 @@ class Header extends Component {
               <Link to="/login">LOGIN</Link>
               <div className="animation"></div>
             </li>
-            <li onClick={this.selectClicked.bind(this)} className="checkAuth" style={{ display: this.state.auth ? "block" : "none" }}>
-              <Link to="/profile/subscribers" >SUBSCRIBERS</Link>
-              <div className="animation"></div>
-            </li>
-            {/* <li>
-              <a href="#" className="nav-link" onClick={this.onLoginoutClick}>
-                LOGOUT
-              </a>
-              <div className="animation"></div>
-            </li> */}
+            {this.state.auth ?
 
-            {/* <li onClick={this.selectClicked.bind(this)}>
-              <Link to="/login">LOGIN</Link>
-              <div className="animation"></div>
-            </li> */}
+              <li onClick={this.selectClicked.bind(this)} className="checkAuth">
+                <Link to="/profile/subscribers" >SUBSCRIBERS</Link>
+                <div className="animation"></div>
+              </li> : <li className="diversion">
+                <div>diversion</div>
+
+              </li>
+            }
+
           </ul>
         </nav>
       </div>

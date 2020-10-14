@@ -214,7 +214,7 @@ class AddArticle extends Component {
     let file = this.state.imageAsFile
     let data = new FormData()
     data.append('file', file)
-    axios.post('/api/image/upload', data, config)
+    axios.post('http://localhost:4000/api/image/upload', data, config)
       .then(data => {
         if (data.data.message === "uploaded") {
           alert("image uploaded")
@@ -224,7 +224,7 @@ class AddArticle extends Component {
         }
       })
     let imageName = file.name.split(" ").join("%20")
-    this.setState({ imgUrl: `/api/image/file/${imageName}` })
+    this.setState({ imgUrl: `http://localhost:4000/api/image/file/${imageName}` })
   };
   copyText = (e) => {
     let input = e.target.previousElementSibling;
@@ -283,7 +283,7 @@ class AddArticle extends Component {
               </div>
               <div className="field upload">
                 <form encType="multipart/form-data" onSubmit={this.submitImage} id="imageForm">
-                  <label className="mb-2">
+                  <label className="mb-5">
                     Upload Image{" "}
                     <h6>
                       The image you upload here will be used inside your articles
@@ -303,13 +303,7 @@ class AddArticle extends Component {
                   >
                     <i className="fas fa-plus"></i> Add Image
                 </label>
-                  {/* <button
-                    className="submit_image"
-                    onClick={this.addImageToArticle}
-                  >
-                    upload
-                </button> */}
-                  <input type="submit" className="copy_image" value="submit" />
+                  <input type="submit" className="submit_image" value="submit" />
                 </form>
               </div>
               <div className="link_picture_article">

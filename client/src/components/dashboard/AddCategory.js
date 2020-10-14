@@ -97,7 +97,7 @@ class Add_category extends Component {
                 />
               </div>
               <div className="field">
-                <label>upload Image</label>
+                <label>Upload Image</label>
                 <input
                   type="file"
                   id="file"
@@ -108,7 +108,7 @@ class Add_category extends Component {
                 <label
                   htmlFor="file"
                   className="profileLabel"
-                  onClick={this.clicked}
+                  onClick={this.clicked} style={{ marginTop: "-5px" }}
                 >
                   <i className="fas fa-plus"></i> Add Image
                 </label>
@@ -125,9 +125,8 @@ class Add_category extends Component {
                         name="publish"
                         value="True"
                         onChange={this.onChange}
-                      />{" "}
-                      <label htmlFor="True">True</label>
-                    </span>
+                      />
+                    </span><label htmlFor="True">True</label>
                   </div>
                   <div className="input-group">
                     <span>

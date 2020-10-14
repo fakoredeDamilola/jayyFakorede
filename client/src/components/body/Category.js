@@ -39,14 +39,19 @@ class Category extends Component {
           <section className="articles_search">
             <div className="articles_search_div">
               <p>ARTICLES</p>
-              <div className="add_article" style={{ display: this.state.auth ? "block" : "none" }}>
-                <button
-                  className="add_article_button"
-                  onClick={this.addArticle}
-                >
-                  <Link to="/profile/addCategory">Add Category</Link>
-                </button>
-              </div>
+              {this.state.auth ?
+                <div className="add_article">
+                  <button
+                    className="add_article_button"
+                    onClick={this.addArticle}
+                  >
+                    <Link to="/profile/addCategory">Add Category</Link>
+                  </button>
+                </div>
+
+                : null
+
+              }
               {/* <div className="articles_input">
                 <input
                   type="text"
