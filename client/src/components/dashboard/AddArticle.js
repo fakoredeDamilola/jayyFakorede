@@ -214,7 +214,7 @@ class AddArticle extends Component {
     let file = this.state.imageAsFile
     let data = new FormData()
     data.append('file', file)
-    axios.post('http://localhost:4000/api/image/upload', data, config)
+    axios.post('/api/image/upload', data, config)
       .then(data => {
         if (data.data.message === "uploaded") {
           alert("image uploaded")
@@ -224,7 +224,7 @@ class AddArticle extends Component {
         }
       })
     let imageName = file.name.split(" ").join("%20")
-    this.setState({ imgUrl: `http://localhost:4000/api/image/file/${imageName}` })
+    this.setState({ imgUrl: `/api/image/file/${imageName}` })
   };
   copyText = (e) => {
     let input = e.target.previousElementSibling;

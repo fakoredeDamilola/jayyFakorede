@@ -854,7 +854,6 @@ input[type="file"] {
     margin-top: -60px;
     display: flex;
     justify-content: space-between;
-    background-color: yellow;
   }
   .diversion {
     visibility: hidden;
