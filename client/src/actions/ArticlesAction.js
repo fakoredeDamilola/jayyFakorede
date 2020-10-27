@@ -58,7 +58,7 @@ export const addCategory = (category, token) => async dispatch => {
   }
   axios.post('/api/image/upload', data, imgConfig)
   let imageName = file.name.split(" ").join("%20")
-  category.previewImage = `/api/image/file/${imageName}`
+  category.previewImage = `https://jayyfakorede.herokuapp.com/api/image/file/${imageName}`
   const res = await axios.post('/api/articlecategory/add',
     category, authConfig)
   dispatch({

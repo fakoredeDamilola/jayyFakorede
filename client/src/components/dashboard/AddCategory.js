@@ -48,7 +48,7 @@ class Add_category extends Component {
               this.props.history.push('/')
             } else {
               alert("session expired, please login again")
-              this.props.history.push('/login')
+              // this.props.history.push('/login')
             }
           })
         this.setState({

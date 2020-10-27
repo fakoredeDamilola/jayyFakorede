@@ -20,7 +20,7 @@ router.route('/login').post((req, res) => {
             if (info.length !== 0) {
                 // res.json(info)
 
-                jwt.sign({ user: info[0] }, 'secretkey', { expiresIn: '24h' }, (err, token) => {
+                jwt.sign({ user: info[0] }, 'secretkey', (err, token) => {
 
                     res.json({ token })
 
