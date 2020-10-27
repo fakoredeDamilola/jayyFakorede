@@ -20,13 +20,12 @@ class Signup extends Component {
     submitBtn = async (e) => {
         e.preventDefault();
         let info = { email: this.state.email, password: this.state.password, secretInfo: this.state.secretInfo }
-        let token
+
         console.log(info)
-        let data = await axios.post("http://localhost:4000/api/auth/create/user", info)
+        let data = await axios.post("/api/auth/create/user", info)
 
-        let tokenVal;
 
-        let dataKeys = Object.keys(data.data)
+        //let dataKeys = Object.keys(data.data)
         if (data.data === "secret key is wrong") {
             alert("secret key is wrong")
         } else {

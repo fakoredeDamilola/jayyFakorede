@@ -12,6 +12,7 @@ class Header extends Component {
     } else {
       let auth = JSON.parse(localStorage.getItem("token"))
       this.setState({ auth: auth[1].logged })
+
     }
   }
 

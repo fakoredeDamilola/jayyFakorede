@@ -19,8 +19,8 @@ class Login extends Component {
   submitBtn = async (e) => {
     e.preventDefault();
     let info = { email: this.state.email, password: this.state.password }
-    let token
-    let data = await axios.post("http://localhost:4000/api/auth/login", info)
+
+    let data = await axios.post("/api/auth/login", info)
 
     let tokenVal;
 

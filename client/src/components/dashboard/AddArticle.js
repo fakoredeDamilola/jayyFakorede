@@ -132,7 +132,6 @@ class AddArticle extends Component {
       if (newArticle.name === "" || newArticle.previewImage.name === undefined || newArticle.shortDescription === "" || newArticle.content === "" || newArticle.author === "") {
         alert("please fill all necessary info, especially the short description and image for that")
       } else {
-        let id = this.state.categoryId
         this.props.addArticle(newArticle, this.state.token)
         this.props.addNumberOfArticles(this.state.categoryId, { number: parseInt(this.props.articleEdit.category[0].number) + 1 }, this.state.token)
       }
@@ -182,7 +181,6 @@ class AddArticle extends Component {
       if (draftArticle.name === "" || draftArticle.previewImage.name === undefined || draftArticle.shortDescription === "" || draftArticle.content === "" || draftArticle.author === "") {
         alert("please fill all necessary info, especially the short description and image for that")
       } else {
-        let id = this.state.categoryId
         this.props.addArticle(draftArticle, this.state.token)
       }
 
