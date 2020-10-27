@@ -9,21 +9,10 @@ router.route('/add').post((req, res) => {
         .then(() => res.json("user added"))
         .catch(err => res.status(400).json(`Error: ${err}`))
 })
-
+let createKey = "jayyFakorede@data.create.com"
 router.route('/login').post((req, res) => {
-    res.cookie("myFirstCookie2266", "looks Good")
     const { email, password } = req.body
-    res.cookie('username', 'Flavio', { expires: new Date(Date.now() + 900000), httpOnly: true })
-    const cookieConfig = {
-        httpOnly: true, // to disable accessing cookie via client side js
-        //secure: true, // to force https (if you use it)
-        maxAge: 1000000000, // ttl in ms (remove this option and cookie will die when browser is closed)
-        // signed: true // if you use the secret with cookieParser
-    };
-    //res.cookie('JWt', 'token', cookieConfig)
-    res.cookie('rememberme', '1', { expires: new Date(Date.now() + 900000), httpOnly: true })
-    res.end("you are")
-    console.log(res.cookie)
+
     User.find().where('email').in([email]).exec((err, records) => {
         if (records) {
             let info = records.filter(rec => rec.email === email && rec.password === password)
@@ -44,18 +33,19 @@ router.route('/login').post((req, res) => {
         }
     })
 })
-router.post('/post', verifyToken, (req, res) => {
-    jwt.verify(req.token, 'secretkey', (err, authData) => {
-        if (err) {
-            // res.sendStatus(403)
-            res.json({ message: "wrong token" })
-        } else {
-            res.json({
-                message: "Post created",
-                authData
-            })
-        }
-    })
+router.post('/create/user', (req, res) => {
+    const { email, password, secretInfo } = req.body
+    console.log(req.body)
+    if (secretInfo === createKey) {
+        const newUser = new User({ email, password })
+        newUser.save()
+            .then(() => res.json('user added'))
+            .catch(err => res.status(400).json(`Error:${err}`))
+    } else {
+        console.log("secret key is wrong")
+        res.json("secret key is wrong")
+    }
+
 })
 
 //verify token

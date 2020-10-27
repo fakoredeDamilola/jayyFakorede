@@ -17,6 +17,7 @@ import Article from "./components/body/Article";
 import CategoryLayout from "./components/layout/CategoryLayout";
 import Login from "./components/dashboard/Login";
 import Subscribers from "./components/dashboard/Subscribers";
+import Signup from "./components/dashboard/Signup";
 import PreviewArticle from "./components/dashboard/PreviewArticle";
 function App() {
   return (
@@ -56,6 +57,8 @@ function App() {
                   exact
                 />
                 <Route component={Article} path="/article/:id/:slug" exact />
+                <Route component={Article} path="/article/:id/:slug" exact />
+                <Route component={Signup} path="/signup" exact />
               </Switch>
             </div>
 

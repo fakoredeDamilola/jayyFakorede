@@ -849,11 +849,10 @@ input[type="file"] {
     height: auto;
     padding: 0px 10px;
     position: static;
-    width: 900px;
-    margin: 0 auto;
-    margin-top: -60px;
+    margin-top: -70px;
     display: flex;
-    justify-content: space-between;
+    background-color: transparent;
+    float: right;
   }
   .diversion {
     visibility: hidden;
@@ -862,18 +861,10 @@ input[type="file"] {
   .header nav ul li {
     padding: 0 10px;
   }
-  .header nav ul li:nth-child(3) {
-    margin-left: 380px;
-  }
-
   .menu-toggle {
     display: none;
   }
   .logo {
-    width: 950px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
     font-size: 45px;
   }
   .header nav ul li:hover .animation,
