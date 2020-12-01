@@ -11,9 +11,18 @@ const connection = mongoose.connection
 connection.once('open', () => {
 
     gfs = Grid(connection.db, mongoose.mongo)
+    //specify the collection our image will be going into. Note that this will be divided into two, upload.chunk and unpload.files
     gfs.collection("jayyImage")
     console.log("image connected")
 })
+// Create a storage object with a given configuration
+// file : A function to control the file storage in the database. Is invoked per file with the parameters req and file, in that order. The return value of this function is an object, or a promise that resolves to an object
+// the object contains a few property such has
+//filename : The desired filename for the file (default: 16 byte hex name without extension), but you can override this with your given name
+//content-type : The content type for the file (default: inferred from the request)
+//bucketname : The GridFs collection to store the file (default: fs)
+//chunkSize : 	The size of file chunks in bytes (default: 261120)
+//mising property will use the default
 let storage = new GridFsStorage({
     url: uri,
     file: (req, file) => {
@@ -33,6 +42,8 @@ let storage = new GridFsStorage({
         )
     }
 })
+
+// Set multer storage engine to the newly created object, we will use this upload variable has our middleware, so that it actually upload to the database
 const upload = multer({ storage })
 router.get("/", verifyToken, (req, res) => {
     jwt.verify(req.token, 'secretkey', (err, authData) => {
@@ -61,6 +72,7 @@ router.get("/", verifyToken, (req, res) => {
 })
 //post  files
 //add the name of the file field to multer
+//when uplading files, between the route and arrow function, we need to add the middleware upload and call a .single (because we are uploading a single file. you can upload multiple file has an array) and you will pass the name you are using in your input file(i.e in the frontend e.g <input type="file" name="file"/>)
 router.post("/upload", verifyToken, upload.single('file'), (req, res) => {
     jwt.verify(req.token, 'secretkey', (err, authData) => {
         if (err) {
@@ -74,6 +86,7 @@ router.post("/upload", verifyToken, upload.single('file'), (req, res) => {
 })
 
 // get files
+//you can use gridfsstream like you will use moongose
 router.get("/files", verifyToken, (req, res) => {
     jwt.verify(req.token, 'secretkey', (err, authData) => {
         if (err) {
