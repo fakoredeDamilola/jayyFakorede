@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import CategoriesGrid from "../layout/CategoriesGrid";
 import { connect } from "react-redux";
 import { getCategories } from "../../actions/ArticlesAction"
+import Spinner from "../layout/Spinner"
 import { Link } from "react-router-dom";
 class Category extends Component {
   componentDidMount() {
@@ -77,7 +78,9 @@ class Category extends Component {
                   <CategoriesGrid key={category._id} category={category} />
                 );
               })
-              : null}
+              : <div>
+                <Spinner value="Getting Data..." />
+              </div>}
           </section>
         </div>
       </div>

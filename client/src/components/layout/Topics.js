@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 const Topics = (props) => {
   let { value } = props;
   let date, time
-  if (value.date) {
-    let arr = value.date.split("T")
+  if (value.createdAt) {
+    let arr = value.createdAt.split("T")
     date = arr[0]
     let arr2 = arr[1].split(":")
     time = `${arr2[0]} : ${arr2[1]}`

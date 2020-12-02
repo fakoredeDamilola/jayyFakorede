@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import MarkdownView from "react-showdown";
 import { getArticle, deleteArticle } from "../../actions/ArticlesAction"
+import Spinner from "../layout/Spinner"
 class Article extends Component {
   componentDidMount() {
     let { slug, id } = this.props.match.params
@@ -41,6 +42,13 @@ class Article extends Component {
   };
   render() {
     const { article } = this.props;
+    let date, time
+    if (article.createdAt) {
+      let arr = article.createdAt.split("T")
+      date = arr[0]
+      let arr2 = arr[1].split(":")
+      time = `${arr2[0]} : ${arr2[1]}`
+    }
     return article ? (
       <div className="articlePage" style={{ wordWrap: "break-word" }}>
         {this.state.auth ?
@@ -60,25 +68,16 @@ class Article extends Component {
           : null
 
         }
-        <div className="editBtn">
-          <div className="add_article">
-            <button className="add_article_button" onClick={this.editArticle}>
-              edit article
-            </button>
-          </div>
-          <div className="add_article">
-            <button className="add_article_button" onClick={this.deleteArticle} style={{ backgroundColor: "rgb(200, 19, 19)" }}>
-              delete article
-            </button>
-          </div>
-        </div>
 
         <div style={{ marginTop: "30px" }}>
-          <h1><b>{article.name}</b></h1>
-          <div className="articleInfo">
-            <div>{article.author}</div>
-            <div>{article.date}</div>
+          <div style={{ textAlign: "center" }}>
+            <h1><b>{article.name}</b></h1>
+            <div className="articleInfo">
+              <div>{article.author}</div>
+              <div>{time} | {date}</div>
+            </div>
           </div>
+
           <div style={{ padding: "50px 20px", backgroundColor: "white", width: "100%" }} className="markdownContainer">
             <MarkdownView
               markdown={article.content}
@@ -88,7 +87,9 @@ class Article extends Component {
         </div>
       </div>
     ) : (
-        <div></div>
+        <div>
+          <Spinner value="Getting Data..." />
+        </div>
       );
   }
 }

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import img1 from "../../img-1.jpg";
 import Instruction from "../layout/Instruction";
+import Spinner from "../layout/Spinner";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import axios from "axios"
@@ -23,7 +24,8 @@ class AddArticle extends Component {
     show: false,
     draft: "",
     multerImage: "",
-    token: ""
+    token: "",
+    loading: false
   };
   componentDidMount() {
     this.props.getArticleToEdit();
@@ -117,7 +119,13 @@ class AddArticle extends Component {
         shortDescription: this.state.shortDescription,
         previewImage: this.state.previewImage,
       };
+      this.setState({ loading: true })
       this.props.editArticle(this.state.id, newArticle, this.state.token)
+        .then(res => {
+          if (res === "article Updated") {
+            this.setState({ loading: false })
+          }
+        })
     } else if (this.state.edit === "add") {
       let newArticle = {
         name: this.state.name,
@@ -132,8 +140,14 @@ class AddArticle extends Component {
       if (newArticle.name === "" || newArticle.previewImage.name === undefined || newArticle.shortDescription === "" || newArticle.content === "" || newArticle.author === "") {
         alert("please fill all necessary info, especially the short description and image for that")
       } else {
+        this.setState({ loading: true })
         this.props.addArticle(newArticle, this.state.token)
-        this.props.addNumberOfArticles(this.state.categoryId, { number: parseInt(this.props.articleEdit.category[0].number) + 1 }, this.state.token)
+          .then(res => {
+            if (res === "article added") {
+              this.setState({ loading: false })
+            }
+          })
+
       }
 
     }
@@ -212,7 +226,7 @@ class AddArticle extends Component {
     let file = this.state.imageAsFile
     let data = new FormData()
     data.append('file', file)
-    axios.post('/api/image/upload', data, config)
+    axios.post('http://localhost:4000/api/image/upload', data, config)
       .then(data => {
         if (data.data.message === "uploaded") {
           alert("image uploaded")
@@ -237,147 +251,59 @@ class AddArticle extends Component {
     this.setState({ show: false });
   };
   render() {
-
-    return (
-      <div
-        style={{
-          backgroundImage: `url(${img1})`,
-          backgroundPosition: "left",
-          backgroundSize: "cover",
-          paddingBottom: "100px",
-        }}
-      >
-        <div className="article-body">
-          <div>
-            <div className="login-header">
-              <div>
-                <span>J A Y Y</span> <span>F A K O R E D E</span>
-              </div>
-              <div style={{ marginTop: "15px" }}>
-                <h3>{this.state.categoryName}</h3>
-              </div>
-              <h6 style={{ marginTop: "15px", color: "rgba(0, 0, 0, 0.563)" }}>
-                ADD ARTICLE
+    return !this.state.loading ?
+      (
+        <div
+          style={{
+            backgroundImage: `url(${img1})`,
+            backgroundPosition: "left",
+            backgroundSize: "cover",
+            paddingBottom: "100px",
+          }}
+        >
+          <div className="article-body">
+            <div>
+              <div className="login-header">
+                <div>
+                  <span>J A Y Y</span> <span>F A K O R E D E</span>
+                </div>
+                <div style={{ marginTop: "15px" }}>
+                  <h3>{this.state.categoryName}</h3>
+                </div>
+                <h6 style={{ marginTop: "15px", color: "rgba(0, 0, 0, 0.563)" }}>
+                  ADD ARTICLE
               </h6>
-            </div>
-            <div className="login-center">
-              <div className="field">
-                <label htmlFor="name">Name</label>
-                <input
-                  type="name"
-                  name="name"
-                  value={this.state.name}
-                  onChange={this.onChange}
-                />
               </div>
-              <div className="field">
-                <label htmlFor="author">Author</label>
-                <input
-                  type="author"
-                  name="author"
-                  value={this.state.author}
-                  onChange={this.onChange}
-                />
-              </div>
-              <div className="field upload">
-                <form encType="multipart/form-data" onSubmit={this.submitImage} id="imageForm">
-                  <label className="mb-5">
-                    Upload Image{" "}
-                    <h6>
-                      The image you upload here will be used inside your articles
-                  </h6>
-                  </label>
+              <div className="login-center">
+                <div className="field">
+                  <label htmlFor="name">Name</label>
                   <input
-                    type="file"
-                    name="file" id="file"
-                    accept="image/*"
-                    className="input"
-                    onChange={this.handleImageAsFile}
-                  />
-                  <label
-                    htmlFor="file"
-                    className="profileLabel"
-                    onClick={this.clicked}
-                  >
-                    <i className="fas fa-plus"></i> Add Image
-                </label>
-                  <input type="submit" className="submit_image" value="submit" />
-                </form>
-              </div>
-              <div className="link_picture_article">
-                <h4 style={{ paddingBottom: "10px" }}>
-                  Links for image uploaded
-                </h4>
-                <div>
-                  <input
-                    type="text"
-                    name="img1_value"
-                    className="linkForImage"
-                    value={this.state.imgUrl}
-                    onChange={() => {
-                      return null;
-                    }}
-                  />
-
-                  <button className="copy_image" onClick={this.copyText}>
-                    copy
-                  </button>
-                </div>
-              </div>
-              <div className="field">
-                <label htmlFor="article">Article</label>
-
-                <textarea
-                  name="content"
-                  cols="30"
-                  rows="50"
-                  style={{ width: "100%", marginTop: "10px" }}
-                  value={this.state.content}
-                  onChange={this.onChange}
-                ></textarea>
-              </div>
-              <div className="editBtn">
-                <div className="submit">
-                  <input
-                    type="submit"
-                    value="Preview"
-                    className="editButton"
-                    onClick={this.preview}
+                    type="name"
+                    name="name"
+                    value={this.state.name}
+                    onChange={this.onChange}
                   />
                 </div>
-                <div className="submit">
+                <div className="field">
+                  <label htmlFor="author">Author</label>
                   <input
-                    type="submit"
-                    value="About Markdown"
-                    className="editButton"
-                    onClick={this.showInstructions}
+                    type="author"
+                    name="author"
+                    value={this.state.author}
+                    onChange={this.onChange}
                   />
                 </div>
-              </div>
-              {this.state.show ? (
-                <div
-                  className="instruction_button"
-                  onClick={this.removeInstruction}
-                >
-                  X
-                </div>
-              ) : null}
-
-              {this.state.show ? <Instruction /> : null}
-              <div>
-
-                <div>
-                  <div className="field">
-                    <label>
+                <div className="field upload">
+                  <form encType="multipart/form-data" onSubmit={this.submitImage} id="imageForm">
+                    <label className="mb-5">
                       Upload Image{" "}
-                      <h6 style={{ marginBottom: "20px" }}>
-                        this image is used for preview, with the short
-                        description
-                        </h6>
+                      <h6>
+                        The image you upload here will be used inside your articles
+                  </h6>
                     </label>
                     <input
                       type="file"
-                      id="file"
+                      name="file" id="file"
                       accept="image/*"
                       className="input"
                       onChange={this.handleImageAsFile}
@@ -388,48 +314,143 @@ class AddArticle extends Component {
                       onClick={this.clicked}
                     >
                       <i className="fas fa-plus"></i> Add Image
-                      </label>
-                  </div>
+                </label>
+                    <input type="submit" className="submit_image" value="submit" />
+                  </form>
+                </div>
+                <div className="link_picture_article">
+                  <h4 style={{ paddingBottom: "10px" }}>
+                    Links for image uploaded
+                </h4>
+                  <div>
+                    <input
+                      type="text"
+                      name="img1_value"
+                      className="linkForImage"
+                      value={this.state.imgUrl}
+                      onChange={() => {
+                        return null;
+                      }}
+                    />
 
-                  <div className="field">
-                    <label htmlFor=" short description">
-                      Short description
-                      </label>
-                    <textarea
-                      name="shortDescription"
-                      cols="30"
-                      rows="10"
-                      style={{ width: "100%", marginTop: "10px" }}
-                      value={this.state.shortDescription}
-                      onChange={this.onChange}
-                    ></textarea>
+                    <button className="copy_image" onClick={this.copyText}>
+                      copy
+                  </button>
                   </div>
                 </div>
+                <div className="field">
+                  <label htmlFor="article">Article</label>
 
-              </div>
-              <div className="submitBox">
-                <div className="submit">
-                  <input
-                    type="submit"
-                    value="Publish"
-                    className="submitBtn"
-                    onClick={this.submit}
-                  />
+                  <textarea
+                    name="content"
+                    cols="30"
+                    rows="50"
+                    style={{ width: "100%", marginTop: "10px" }}
+                    value={this.state.content}
+                    onChange={this.onChange}
+                  ></textarea>
                 </div>
-                <div className="submit">
-                  <input
-                    type="submit"
-                    value="Save draft"
-                    className="submitBtn"
-                    onClick={this.saveDraft} style={{ background: "orange" }}
-                  />
+                <div className="editBtn">
+                  <div className="submit">
+                    <input
+                      type="submit"
+                      value="Preview"
+                      className="editButton"
+                      onClick={this.preview}
+                    />
+                  </div>
+                  <div className="submit">
+                    <input
+                      type="submit"
+                      value="About Markdown"
+                      className="editButton"
+                      onClick={this.showInstructions}
+                    />
+                  </div>
+                </div>
+                {this.state.show ? (
+                  <div
+                    className="instruction_button"
+                    onClick={this.removeInstruction}
+                  >
+                    X
+                  </div>
+                ) : null}
+
+                {this.state.show ? <Instruction /> : null}
+                <div>
+
+                  <div>
+                    <div className="field">
+                      <label>
+                        Upload Image{" "}
+                        <h6 style={{ marginBottom: "20px" }}>
+                          this image is used for preview, with the short
+                          description
+                        </h6>
+                      </label>
+                      <input
+                        type="file"
+                        id="file"
+                        accept="image/*"
+                        className="input"
+                        onChange={this.handleImageAsFile}
+                      />
+                      <label
+                        htmlFor="file"
+                        className="profileLabel"
+                        onClick={this.clicked}
+                      >
+                        <i className="fas fa-plus"></i> Add Image
+                      </label>
+                    </div>
+
+                    <div className="field">
+                      <label htmlFor=" short description">
+                        Short description
+                      </label>
+                      <textarea
+                        name="shortDescription"
+                        cols="30"
+                        rows="10"
+                        style={{ width: "100%", marginTop: "10px" }}
+                        value={this.state.shortDescription}
+                        onChange={this.onChange}
+                      ></textarea>
+                    </div>
+                  </div>
+
+                </div>
+                <div className="submitBox">
+                  <div className="submit">
+                    <input
+                      type="submit"
+                      value="Publish"
+                      className="submitBtn"
+                      onClick={this.submit}
+                    />
+                  </div>
+                  <div className="submit">
+                    <input
+                      type="submit"
+                      value="Save draft"
+                      className="submitBtn"
+                      onClick={this.saveDraft} style={{ background: "orange" }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    );
+      ) : (<div>
+        <Spinner value="creating article" />
+      </div>)
+
+
+
+
+
   }
 }
 

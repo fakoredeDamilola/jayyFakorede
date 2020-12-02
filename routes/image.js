@@ -63,6 +63,7 @@ router.get("/", verifyToken, (req, res) => {
                         }
 
                     })
+
                     res.json(files)
                 }
             })

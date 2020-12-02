@@ -18,9 +18,9 @@ const CategoriesGrid = (props) => {
         data-aos={`${category.aos}`}
       >
         <div className="section-2-grid-text">
-          <h6 style={{ color: "rgb(202, 199, 199)" }}>
+          {/* <h6 style={{ color: "rgb(202, 199, 199)" }}>
             <b>Number of Articles: <span>{category.number}</span></b>
-          </h6>
+          </h6> */}
           <p>{category.name}</p>
           <h5 className="link">
             <Link to={`/articles/${category._id}`}>Show More&nbsp;→</Link>

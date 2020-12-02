@@ -1,19 +1,13 @@
-import Spinner from "./spinner.gif";
-import React from "react";
+import React from 'react'
 
-export default function Spin() {
+export default function Spinner(props) {
+  let { value } = props
   return (
-    <div>
-      <img
-        src={Spinner}
-        alt="Loading..."
-        style={{
-          width: "200px",
-          height: "200px",
-          margin: "auto",
-          display: "block"
-        }}
-      />
+    <div className="lds-wrapper">
+
+      <div className="lds-text">{value}</div>
+      <div className="lds-hourglass"></div>
     </div>
-  );
+
+  )
 }

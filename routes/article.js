@@ -20,13 +20,12 @@ router.post('/add', verifyToken, (req, res) => {
         if (err) {
             res.json({ message: "expired token" })
         } else {
-            const { name, draft, shortDescription, content, time, date, categoryName, categoryId, previewImage, author } = req.body
+            const { name, draft, shortDescription, content, date, categoryName, categoryId, previewImage, author } = req.body
             const newArticle = new Article({
                 name,
                 draft,
                 content,
                 date,
-                time,
                 author,
                 categoryName,
                 categoryId,

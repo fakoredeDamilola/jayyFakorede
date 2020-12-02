@@ -22,7 +22,7 @@ export const previewArticle = (article) => {
 };
 
 
-// CATEGORIES 
+// CATEGORIES
 
 
 export const getCategories = () => async dispatch => {
@@ -49,14 +49,14 @@ export const addCategory = (category, token) => async dispatch => {
   let data = new FormData()
   data.append('file', file)
   let imgConfig = {
-    headers: { 'content-type': 'multipart/form-data' }
+    headers: { 'content-type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
   }
   let authConfig = {
     headers: {
       'Authorization': `Bearer ${token}`
     }
   }
-  axios.post('/api/image/upload', data, imgConfig)
+  let result = axios.post('/api/image/upload', data, imgConfig)
   let imageName = file.name.split(" ").join("%20")
   category.previewImage = `/api/image/file/${imageName}`
   const res = await axios.post('/api/articlecategory/add',
@@ -121,7 +121,7 @@ export const addArticle = (article, token) => async dispatch => {
     payload: res.data
   })
 
-
+  return res.data
 }
 
 export const deleteArticle = (id, token) => async dispatch => {
@@ -144,6 +144,7 @@ export const editArticle = (id, article, token) => async dispatch => {
   }
   const res = await axios.post(`/api/article/update/${id}`,
     article, authConfig)
+  return res.data
 }
 export const uploadArticleImage = (formData, config) => async dispatch => {
   axios.post('/api/upload/image', formData, config)
@@ -199,6 +200,7 @@ export const addNumberOfArticles = (id, number, token) => async dispatch => {
       'Authorization': `Bearer ${token}`
     }
   }
+  console.log(id, number)
   const res = await axios.post(`/api/articleCategory/addNumber/${id}`, number, authConfig)
   dispatch({
     type: ADD_NUMBERS,
