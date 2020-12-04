@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 
 class Header extends Component {
   state = {
-    auth: false
+    auth: false,
+    darkMode: false
   }
   UNSAFE_componentWillMount() {
     document.addEventListener("mousedown", this.showNav, false);
@@ -13,6 +14,15 @@ class Header extends Component {
       let auth = JSON.parse(localStorage.getItem("token"))
       this.setState({ auth: auth[1].logged })
 
+    }
+
+    const currentTheme = localStorage.getItem("theme")
+
+    if (currentTheme) {
+      document.documentElement.setAttribute("data-theme", currentTheme)
+      if (currentTheme === "dark") {
+        this.setState({ darkMode: true })
+      }
     }
   }
 
@@ -41,9 +51,30 @@ class Header extends Component {
       menu.classList.remove("active");
     });
   };
-  onLoginoutClick = (e) => {
+  logout = (e) => {
     e.preventDefault();
+    let logObj = { logged: false }
+    let tokenVal;
+    tokenVal = []
+    tokenVal.push({})
+    tokenVal.push(logObj)
+    localStorage.setItem("token", JSON.stringify(tokenVal))
+    window.location.reload(false)
   };
+  onChange = (e) => {
+    this.setState({ [e.target.name]: e.target.checked })
+    this.changeValue(e.target.checked)
+  }
+  changeValue = (check) => {
+
+    if (check) {
+      document.documentElement.setAttribute("data-theme", "dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.setAttribute("data-theme", "light");
+      localStorage.setItem("theme", "light");
+    }
+  }
   render() {
     return (
       <div
@@ -75,11 +106,15 @@ class Header extends Component {
               <li onClick={this.selectClicked.bind(this)} className="checkAuth">
                 <Link to="/profile/addCategory" >ADD CATEGORY</Link>
                 <div className="animation"></div>
-              </li> : <li className="diversion">
-                <div>diversion</div>
+              </li> : null
 
-              </li>
+            }
+            {this.state.auth ?
 
+              <li onClick={this.selectClicked.bind(this)} className="checkAuth">
+                <Link to="/profile/subscribers" >SUBSCRIBERS</Link>
+                <div className="animation"></div>
+              </li> : null
             }
             <li onClick={this.selectClicked.bind(this)}>
               <Link to="/articles">ARTICLES</Link>
@@ -90,21 +125,30 @@ class Header extends Component {
               <Link to="/about">ABOUT ME</Link>
               <div className="animation"></div>
             </li>
-            <li onClick={this.selectClicked.bind(this)}>
-              <Link to="/login">LOGIN</Link>
-              <div className="animation"></div>
-            </li>
             {this.state.auth ?
 
               <li onClick={this.selectClicked.bind(this)} className="checkAuth">
-                <Link to="/profile/subscribers" >SUBSCRIBERS</Link>
+                <Link to="/" onClick={this.logout}>LOGOUT</Link>
                 <div className="animation"></div>
-              </li> : <li className="diversion">
-                <div>diversion</div>
+              </li> : <li onClick={this.selectClicked.bind(this)}>
+                <Link to="/login">LOGIN</Link>
+                <div className="animation"></div>
+              </li>
+            }
+            {!this.state.auth &&
 
+              <li onClick={this.selectClicked.bind(this)} className="checkAuth">
+                <Link to="/signup" >SIGNUP</Link>
+                <div className="animation"></div>
               </li>
             }
 
+            <li className="mode">
+              <label htmlFor="checkbox" className="theme-switch">
+                <input type="checkbox" id="checkbox" name="darkMode" checked={this.state.darkMode} onChange={this.onChange} />
+                <div className="slider round"></div>
+              </label>
+            </li>
           </ul>
         </nav>
       </div>

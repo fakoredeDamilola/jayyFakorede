@@ -83,16 +83,18 @@ export const deleteCategory = (id, token) => async dispatch => {
 
 export const getArticles = (id) => async dispatch => {
   const res = await axios.get(`/api/article/articles/${id}`)
+
   dispatch({
     type: GET_ARTICLES,
     payload: res.data
   })
 }
-export const getArticle = (id) => async dispatch => {
-  const res = await axios.get(`/api/article/${id}`)
+export const getArticle = (slug) => async dispatch => {
+  const res = await axios.get(`/api/article/${slug}`)
+
   dispatch({
     type: GET_ARTICLE,
-    payload: res.data
+    payload: res.data[0]
   })
 }
 
@@ -111,6 +113,7 @@ export const addArticle = (article, token) => async dispatch => {
       'Authorization': `Bearer ${token}`
     }
   }
+
   axios.post('/api/image/upload', data, imgConfig)
   let imageName = file.name.split(" ").join("%20")
   article.previewImage = `/api/image/file/${imageName}`
@@ -179,7 +182,7 @@ export const addSubscribers = (subscribe, token) => async dispatch => {
     type: ADD_SUBSCRIBERS,
     payload: res.data
   })
-
+  return res.data
 
 }
 export const getSubscribers = (token) => async dispatch => {

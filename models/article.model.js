@@ -6,8 +6,10 @@ const articleSchema = new Schema({
     content: { type: String, required: true },
     author: { type: String, required: true },
     categoryName: { type: String, required: true },
+    slug: { type: String, required: true },
     categoryId: { type: String, required: true },
     shortDescription: { type: String, required: true },
+    markdown: { type: String },
     previewImage: { type: String, required: true }
 }, { timestamps: true })
 const Article = mongoose.model('Article', articleSchema)

@@ -24,7 +24,7 @@ class Subscribers extends Component {
         return (
             <div className="container">
                 <h1>List of subscribers</h1>
-                <ul className="list-group my-5">
+                <ul className="list-group my-5" style={{ color: "#777" }}>
                     {subscribers ?
                         subscribers.map(subscriber => {
                             return (

@@ -80,7 +80,7 @@ class Article extends Component {
 
           <div style={{ padding: "50px 20px", backgroundColor: "white", width: "100%" }} className="markdownContainer">
             <MarkdownView
-              markdown={article.content}
+              markdown={article.markdown}
               options={{ tables: true, emoji: true, parseImgDimensions: true }}
               className="markdown" />
           </div>

@@ -1,8 +1,8 @@
 const router = require('express').Router()
 const jwt = require("jsonwebtoken")
 let Article = require('../models/article.model')
-// let ArticleCategory = require('../models/articleCategory.model')
-
+let showdown = require('showdown')
+let converter = new showdown.Converter();
 //show all the article in that category
 router.route('/articles/:categoryID').get((req, res) => {
     // Article.findById(req.params.id)
@@ -14,6 +14,18 @@ router.route('/articles/:categoryID').get((req, res) => {
         }
     })
 })
+
+
+converter.setOption('simplifiedAutoLink', 'true');
+router.post("/convert", function (req, res, next) {
+    if (typeof req.body.content == 'undefined' || req.body.content == null) {
+        res.json(["error", "No data found"]);
+    } else {
+        let text = req.body.content;
+        let html = converter.makeHtml(text)
+        res.json(["markdown", html])
+    }
+})
 //add an article
 router.post('/add', verifyToken, (req, res) => {
     jwt.verify(req.token, 'secretkey', (err, authData) => {
@@ -21,10 +33,15 @@ router.post('/add', verifyToken, (req, res) => {
             res.json({ message: "expired token" })
         } else {
             const { name, draft, shortDescription, content, date, categoryName, categoryId, previewImage, author } = req.body
+            let text = content;
+            let markdown = converter.makeHtml(text)
+            let slug = name.split(" ").join("-")
             const newArticle = new Article({
                 name,
                 draft,
+                slug,
                 content,
+                markdown,
                 date,
                 author,
                 categoryName,
@@ -34,17 +51,28 @@ router.post('/add', verifyToken, (req, res) => {
             })
             newArticle.save()
                 .then(() => res.json("article added"))
-                .catch(err => res.status(400).json(`Error: ${err}`))
+                .catch(err => {
+                    console.log(err)
+                    res.status(400).json(`Error: ${err}`)
+                })
         }
     })
 
 })
 
 // get a single article
-router.route('/:id').get((req, res) => {
-    Article.findById(req.params.id)
-        .then(article => res.json(article))
-        .catch(err => res.status(400).json('Error: ' + err))
+router.route('/:slug').get((req, res) => {
+    // Article.findById(req.params.id)
+    //     .then(article => res.json(article))
+    //     .catch(err => res.status(400).json('Error: ' + err))
+    console.log(req.params.slug)
+    Article.find().where('slug').in([req.params.slug]).exec((err, records) => {
+        if (records) {
+            res.json(records)
+        } else {
+            res.status(400).json(`Error: ${err}`)
+        }
+    })
 })
 
 //delete an article
@@ -69,11 +97,14 @@ router.post('/update/:id', verifyToken, (req, res) => {
             console.log("expired token")
             res.json({ message: "expired token" })
         } else {
+            let text = req.body.content;
+            let markdown = converter.makeHtml(text)
             Article.findById(req.params.id)
                 .then(article => {
                     article.name = req.body.name
                     article.draft = req.body.draft
                     article.content = req.body.content
+                    article.markdown = markdown
                     article.date = req.body.date
                     article.time = req.body.time
                     article.author = req.body.author
@@ -92,6 +123,9 @@ router.post('/update/:id', verifyToken, (req, res) => {
     })
 
 })
+// So, for example, we can set an option to automatically insert and link a specified URL without any markup.
+
+
 function verifyToken(req, res, next) {
     //get auth header value
     const bearerHeader = req.headers['authorization']

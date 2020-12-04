@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import img1 from "../../img-1.jpg";
 import Instruction from "../layout/Instruction";
 import Spinner from "../layout/Spinner";
+import Popup from "../layout/Popup";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import axios from "axios"
@@ -25,7 +26,10 @@ class AddArticle extends Component {
     draft: "",
     multerImage: "",
     token: "",
-    loading: false
+    popup: false,
+    loading: false,
+    popupColor: "",
+    popupData: ""
   };
   componentDidMount() {
     this.props.getArticleToEdit();
@@ -117,15 +121,32 @@ class AddArticle extends Component {
         categoryName: this.state.categoryName,
         categoryId: this.state.categoryId,
         shortDescription: this.state.shortDescription,
-        previewImage: this.state.previewImage,
+        previewImage: this.state.previewImage
       };
       this.setState({ loading: true })
       this.props.editArticle(this.state.id, newArticle, this.state.token)
         .then(res => {
           if (res === "article Updated") {
             this.setState({ loading: false })
+            let id = this.state.categoryId
+            this.setState({
+              content: "",
+              name: "",
+              author: "",
+              shortDescription: "",
+              previewImage: "",
+              id: "",
+              draft: "",
+              categoryId: "",
+              categoryName: "",
+              edit: "",
+            });
+            this.props.history.push(
+              `/articles/${id}`
+            );
           }
         })
+
     } else if (this.state.edit === "add") {
       let newArticle = {
         name: this.state.name,
@@ -135,41 +156,47 @@ class AddArticle extends Component {
         categoryName: this.state.categoryName,
         categoryId: this.state.categoryId,
         shortDescription: this.state.shortDescription,
-        previewImage: this.state.imageAsFile,
+        previewImage: this.state.imageAsFile
       };
       if (newArticle.name === "" || newArticle.previewImage.name === undefined || newArticle.shortDescription === "" || newArticle.content === "" || newArticle.author === "") {
-        alert("please fill all necessary info, especially the short description and image for that")
+        this.setState({
+          popup: true,
+          popupData: "please fill all necessary info, especially the short description and image for that",
+          popupColor: "danger",
+        })
       } else {
         this.setState({ loading: true })
         this.props.addArticle(newArticle, this.state.token)
           .then(res => {
             if (res === "article added") {
               this.setState({ loading: false })
+              let id = this.state.categoryId
+              this.setState({
+                content: "",
+                name: "",
+                author: "",
+                shortDescription: "",
+                previewImage: "",
+                id: "",
+                draft: "",
+                categoryId: "",
+                categoryName: "",
+                edit: "",
+              });
+              this.props.history.push(
+                `/articles/${id}`
+              );
             }
           })
 
       }
 
     }
-    let id = this.state.categoryId
-    this.setState({
-      content: "",
-      name: "",
-      author: "",
-      shortDescription: "",
-      previewImage: "",
-      id: "",
-      draft: "",
-      categoryId: "",
-      categoryName: "",
-      edit: "",
-    });
-    this.props.history.push(
-      `/articles/${id}`
-    );
+
   };
   saveDraft = (e) => {
     if (this.state.edit === "edit") {
+      this.setState({ loading: true })
       let draftArticle = {
         name: this.state.name,
         draft: true,
@@ -181,6 +208,28 @@ class AddArticle extends Component {
         previewImage: this.state.previewImage,
       };
       this.props.editArticle(this.state.id, draftArticle, this.state.token)
+        .then(res => {
+          this.setState({ loading: false })
+          if (res === "article Updated") {
+            let id = this.state.categoryId
+            this.setState({
+              content: "",
+              name: "",
+              author: "",
+              shortDescription: "",
+              previewImage: "",
+              id: "",
+              draft: "",
+              categoryId: "",
+              categoryName: "",
+              edit: "",
+            });
+            this.props.history.push(
+              `/articles/${id}`
+            );
+          }
+        })
+
     } else if (this.state.edit === "add") {
       let draftArticle = {
         name: this.state.name,
@@ -193,28 +242,41 @@ class AddArticle extends Component {
         previewImage: this.state.imageAsFile,
       };
       if (draftArticle.name === "" || draftArticle.previewImage.name === undefined || draftArticle.shortDescription === "" || draftArticle.content === "" || draftArticle.author === "") {
-        alert("please fill all necessary info, especially the short description and image for that")
+        this.setState({
+          popup: true,
+          popupData: "please fill all necessary info, especially the short description and image for that",
+          popupColor: "danger",
+        })
       } else {
+        this.setState({ loading: true })
         this.props.addArticle(draftArticle, this.state.token)
+          .then(res => {
+            this.setState({ loading: false })
+            if (res === "article added") {
+
+              let id = this.state.categoryId
+              this.setState({
+                content: "",
+                name: "",
+                author: "",
+                shortDescription: "",
+                previewImage: "",
+                id: "",
+                draft: "",
+                categoryId: "",
+                categoryName: "",
+                edit: "",
+              });
+              this.props.history.push(
+                `/articles/${id}`
+              );
+            }
+          })
+
       }
 
     }
-    let id = this.state.categoryId
-    this.setState({
-      content: "",
-      name: "",
-      author: "",
-      shortDescription: "",
-      previewImage: "",
-      id: "",
-      draft: "",
-      categoryId: "",
-      categoryName: "",
-      edit: "",
-    });
-    this.props.history.push(
-      `/articles/${id}`
-    );
+
 
   };
   submitImage = (e) => {
@@ -223,21 +285,42 @@ class AddArticle extends Component {
     const config = {
       headers: { 'content-type': 'multipart/form-data', 'Authorization': `Bearer ${this.state.token}` }
     }
-    let file = this.state.imageAsFile
-    let data = new FormData()
-    data.append('file', file)
-    axios.post('http://localhost:4000/api/image/upload', data, config)
-      .then(data => {
-        if (data.data.message === "uploaded") {
-          alert("image uploaded")
-        } else {
-          alert("session ended")
-          this.props.history.push("/login");
-        }
+    console.log(this.state.imageAsFile.name)
+    if (this.state.imageAsFile.name !== undefined) {
+      let file = this.state.imageAsFile
+      let data = new FormData()
+      data.append('file', file)
+      axios.post('/api/image/upload', data, config)
+        .then(data => {
+          if (data.data.message === "uploaded") {
+            this.setState({
+              popup: true,
+              popupData: "Image uploaded",
+              popupColor: "info",
+            })
+          } else {
+            this.setState({
+              popup: true,
+              popupData: "Session ended",
+              popupColor: "danger",
+            })
+            this.props.history.push("/login");
+          }
+        })
+      let imageName = file.name.split(" ").join("%20")
+      this.setState({ imgUrl: `/api/image/file/${imageName}` })
+    } else {
+      this.setState({
+        popup: true,
+        popupData: "No image was selected",
+        popupColor: "danger",
       })
-    let imageName = file.name.split(" ").join("%20")
-    this.setState({ imgUrl: `/api/image/file/${imageName}` })
+    }
+
   };
+  closeAlert = () => {
+    this.setState({ popup: false })
+  }
   copyText = (e) => {
     let input = e.target.previousElementSibling;
     input.select();
@@ -317,12 +400,19 @@ class AddArticle extends Component {
                 </label>
                     <input type="submit" className="submit_image" value="submit" />
                   </form>
+                  {
+                    this.state.popup &&
+                    <Popup
+                      color={this.state.popupColor} data={this.state.popupData}
+                      closeAlert={this.closeAlert}
+                    />
+                  }
                 </div>
                 <div className="link_picture_article">
                   <h4 style={{ paddingBottom: "10px" }}>
                     Links for image uploaded
                 </h4>
-                  <div>
+                  <div className="imgField">
                     <input
                       type="text"
                       name="img1_value"
@@ -421,7 +511,7 @@ class AddArticle extends Component {
                   </div>
 
                 </div>
-                <div className="submitBox">
+                <div className="submitBox mb-2">
                   <div className="submit">
                     <input
                       type="submit"
@@ -439,6 +529,13 @@ class AddArticle extends Component {
                     />
                   </div>
                 </div>
+                {
+                  this.state.popup &&
+                  <Popup
+                    color={this.state.popupColor} data={this.state.popupData}
+                    closeAlert={this.closeAlert}
+                  />
+                }
               </div>
             </div>
           </div>

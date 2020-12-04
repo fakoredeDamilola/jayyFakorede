@@ -22,12 +22,12 @@ const Topics = (props) => {
       }}>
       </div>
       <div className="category_name mt-4">
-        <h4 style={{ color: "black" }}><b>{value.name}</b></h4>
+        <h4><b>{value.name}</b></h4>
         <h5>{value.shortDescription}</h5>
 
       </div>
       <div className="category_link">
-        <Link to={`/article/${value.categoryId}/${value._id}`}>&nbsp;→</Link>
+        <Link to={`/article/${value.categoryId}/${value.slug}`}>&nbsp;→</Link>
       </div>
       <div className="category_info">
         <span>By {value.author}</span> | {date} | {time}

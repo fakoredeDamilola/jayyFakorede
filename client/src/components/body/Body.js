@@ -3,13 +3,17 @@ import img1 from "../../img-1.jpg";
 import img5 from "../../img-5.jpg";
 import pattern from "../../pattern-quotes.svg";
 import CategoriesGrid from "../layout/CategoriesGrid";
+import Popup from "../layout/Popup"
 import { getCategories, addSubscribers } from "../../actions/ArticlesAction"
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 class Body extends Component {
   state = {
     ctaInput: "",
-    token: ""
+    token: "",
+    popup: false,
+    popupColor: "",
+    popupData: ""
   };
   componentDidMount() {
     this.props.getCategories()
@@ -33,12 +37,36 @@ class Body extends Component {
         email: this.state.ctaInput,
       };
       this.props.addSubscribers(subscribeInfo, this.state.token)
-      alert("thank you!! Expect my message shortly");
-      this.setState({ ctaInput: "" })
+        .then(res => {
+          if (res === "Subscriber added") {
+            this.setState({
+              popup: true,
+              popupData: res,
+              popupColor: "info",
+              ctaInput: ""
+            })
+          } else {
+            this.setState({
+              popup: true,
+              popupData: res,
+              popupColor: "danger",
+              ctaInput: ""
+            })
+          }
+        })
+
     } else {
-      alert("I need your email");
+      this.setState({
+        popup: true,
+        popupData: "You have to type your email address",
+        popupColor: "danger",
+        ctaInput: ""
+      })
     }
   };
+  closeAlert = () => {
+    this.setState({ popup: false })
+  }
   render() {
 
     const { categories } = this.props
@@ -88,7 +116,13 @@ class Body extends Component {
                     />
                   </div>
                 </div>
-
+                {
+                  this.state.popup &&
+                  <Popup
+                    color={this.state.popupColor} data={this.state.popupData}
+                    closeAlert={this.closeAlert}
+                  />
+                }
                 <div className="section-1-text">
                   <p>ENTER YOUR EMAIL AND JOIN THE ADVENTURE</p>
                 </div>
