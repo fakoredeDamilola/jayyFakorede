@@ -28,6 +28,6 @@ I wanted to build a cool blog that has a admin panel and all, so I started worki
 
 Through this project, I learnt about how to organize my code for easy access. Redux was an obvious option for state management has it involved a lot of movement from the frontend to the database.
 
-I was able to learn more about MongoDB and Redux state, I learnt about react showdown which is used to covert markdown text into HTML and vis versa and also how to create a dark mode version. From this project, I also learnt how to upload images and files on mongoDB and retrieve it. You can read my article on how to do it
+I was able to learn more about MongoDB and Redux state, I learnt about react showdown which is used to covert markdown text into HTML and vis versa and also how to create a dark mode version. From this project, I also learnt how to upload images and files on [mongoDB and retrieve it](https://dev.to/fakorededamilola/uploading-images-on-mongodb-via-nodejs-5h1l). 
 
 
