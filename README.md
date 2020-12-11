@@ -1,99 +1,33 @@
-# This is a MERN(mongodb, express, react and nodejs) stack CRUD (create, read, update and delete) application
+## JAYYFAKOREDE
 
-## [jayyfakorede.herokuapp.com](https://jayyfakorede.herokuapp.com/)
+jayyFakorede is a fullstack react application blog and my first every fullstack application after learning how to build fullstack application. Prior to that I was a frontend developer.
 
-## this is a basic login credentials
+---
 
-### email = dfako
+## STACK
+* React
+* NodeJS
+* MongoDB
+* Bootstrap
 
-### password = password
+---
 
-Images are very important on our websites, and gives life to the internet. A website without at least one or two images will be very close to boring.
-Images like content can be uploaded too a database for easy access, and today I am going to show you how to easily upload images to mongoDB via nodeJS.
-Today I will explain how to
-i. Upload images to mongodb
-ii. Get the list of image object (in an array)
-iii. Get a single image object
-iv. Display the actual image.
+## PREVIEW
 
-Before we move forward, we are definitely going to need some packages from NPM (Node Package Manager), such has
+[jayyFakorede](https://jayyfakorede.herokuapp.com/)
 
-1. Express : basically a Node.js web application framework
-2. Mongoose : Object Data Modeling (ODM) library for MongoDB and Node.js. It basically handles relationship between data
-3. Multer : Is used for uploading files
-4. Gridfs-stream : Allows streaming of files to and from mongodb
-   5 Gridfs : This is a specification for storing and retriviing files that excess the BSON-document size limit of 16MB
+---
 
-```
-npm i express mongoose multer multer-gridfs-storage gridfs-stream
-```
+## PROJECT PURPOSE AND GOAL
 
-We will be uploadng straight to mongodb atlas, which is a remote mongoDB database, you can also use the local instance but the connection string will be different.
-
-The first thing is to import the required modules, and some core nodeJS modules
-
-```
-const express = require('express')
-const path = require('path')
-const crypto = require('crypto')//to generate file name
-const mongoose = require('mongoose')
-const multer = require('multer')
-const GridFsStorage = require('multer-gridfs-storage')
-const Grid = require('gridfs-stream')
-const app = express()
-```
-
-Next is to add the connection string. If you are using the local instance , yours will probably be 27017
-
-```
-const mongoURI = "mongodb+srv://fako:fako@nodejspassport-nahp0.mongodb.net"
-```
-
-yours will probably be different.
-Next thing is to initialize a variable for stream and once the connection is open, set the gfs variable to Grid(gridfs-stream) and then pass the collection where our images will be stored to gfs. Note that this collection will be divided into two, imageUpload.chunk and imageUpload.files
-
-```
-let gfs
-conn.once('open', () => {
-    //initialize our stream
-    gfs = Grid(conn.db, mongoose.mongo)
-    gfs.collection('imageUpload')
-})
-
-```
-
-Now, we are going to create a storage object with a given configuration.
-The first property will be the uri string which we specified above and the second is called **file**, a function to control the file storage in the database. It is invoked per file with the parameters req and file in that order and returns an object of a promise that resolves to an object. Some of the property of the object include
-filename : The desired filename for the file (default: 16 byte hex name without extension), but you can override this with your given name
-content-type : The content type for the file (default: inferred from the request)
-bucketname : The GridFs collection to store the file (default: fs)
-missing property will use the default
-
-```
-let storage = new GridFsStorage({
-    url: uri,
-    file: (req, file) => {
-        return new Promise(
-            (resolve, reject) => {
-                console.log(file)
+I wanted to build a cool blog that has a admin panel and all, so I started working in this. I wanted to build a blog that was visually appealing to both the users and the admin. I also wanted a blog with little or no difficulties, from uploading pictures to writing the actually article.
 
 
-                const fileInfo = {
-                    filename: file.originalname,
-                    bucketName: "imageUpload"
-                }
-                resolve(fileInfo)
+---
+## LESSON LEARNT
 
-            }
-        )
-    }
-})
-```
+Through this project, I learnt about how to organize my code for easy access. Redux was an obvious option for state management has it involved a lot of movement from the frontend to the database.
 
-Set the multer storage engine to the newly created object, we will use this upload variable has our middleware, so that it actually upload to the database
+I was able to learn more about MongoDB and Redux state, I learnt about react showdown which is used to covert markdown text into HTML and vis versa and also how to create a dark mode version. From this project, I also learnt how to upload images and files on mongoDB and retrieve it. You can read my article on how to do it
 
-```
-const upload = multer({ storage })
-```
 
-Now to actually upload an image,
